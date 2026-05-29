@@ -48,6 +48,16 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    // navigation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    // coil : image routing
+    implementation("io.coil-kt:coil-compose:2.6.0")
+    // viewmodel : (data management and compose rendering)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    // Get icons from material design
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
