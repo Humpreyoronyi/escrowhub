@@ -1,15 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
 }
 
 android {
     namespace = "com.example.escrowhub"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.escrowhub"
@@ -40,8 +37,27 @@ android {
 }
 
 dependencies {
+    // Firebase deependencies
+    // Firebase BOM - management dependency for firebase products
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    // firebase authentication product(auth)
+    implementation("com.google.firebase:firebase-auth-ktx")
+    // database
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    //storage
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui)
+    implementation(libs.firebase.crashlytics.buildtools)
+    // Coroutines support for firebase i.e. a way of handling background process
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
+
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.animation.core)
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -56,6 +72,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     // Get icons from material design
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
+    implementation(libs.firebase.crashlytics.buildtools)
 
 
     testImplementation(libs.junit)

@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
-import com.example.escrowhub.navigation.MediaHubNavGraph
+import com.example.escrowhub.navigation.EscrowHubNavGraph
 import com.example.escrowhub.ui.theme.EscrowHubTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,10 +14,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             EscrowHubTheme {
-                // Stipulate the app to use navgraph
-                // For screen load and start destination screen
                 val navController = rememberNavController()
-                MediaHubNavGraph(navController)
+                EscrowHubNavGraph(navController)
             }
         }
     }

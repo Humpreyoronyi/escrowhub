@@ -6,11 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.escrowhub.ui.screens.DashboardScreen
 import com.example.escrowhub.ui.screens.EscrowScreen
+import com.example.escrowhub.ui.screens.ForgotPasswordScreen
 import com.example.escrowhub.ui.screens.LoginScreen
+import com.example.escrowhub.ui.screens.RegisterScreen
 import com.example.escrowhub.ui.screens.SplashScreen
 
 @Composable
-fun MediaHubNavGraph(navController: NavHostController) {
+fun EscrowHubNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route
@@ -20,6 +22,12 @@ fun MediaHubNavGraph(navController: NavHostController) {
         }
         composable(route = Screen.Login.route) {
             LoginScreen(navController = navController)
+        }
+        composable(route = Screen.Register.route) {
+            RegisterScreen(navController = navController)
+        }
+        composable(route = Screen.ForgotPassword.route) {
+            ForgotPasswordScreen(navController = navController)
         }
         composable(route = Screen.Dashboard.route) {
             DashboardScreen(navController = navController)
