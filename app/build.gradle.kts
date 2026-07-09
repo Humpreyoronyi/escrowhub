@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.play.services.wallet)
     // Coroutines support for firebase i.e. a way of handling background process
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
 
@@ -64,6 +65,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    // networking
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp.logging)
     // navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
     // coil : image routing

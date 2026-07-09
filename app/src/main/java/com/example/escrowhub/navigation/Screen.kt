@@ -7,11 +7,12 @@ sealed class Screen(val route : String){
     object Register : Screen("register")
     object ForgotPassword : Screen("forgot_password")
     object Dashboard : Screen("dashboard")
-    object MediaDetail : Screen("media_detail/{mediaId}")
+    object EscrowDetail : Screen("escrow_detail/{escrowId}")
     {
-        fun createRoute(mediaId: String)="media_detail/$mediaId"
+        fun createRoute(escrowId: String)="escrow_detail/$escrowId"
     }
     object Notification : Screen("notification")
     object Escrow : Screen("escrow")
+    object Wallet : Screen("wallet")
     object TransactionHistory : Screen("transaction_history")
 }

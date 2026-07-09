@@ -2,14 +2,18 @@ package com.example.escrowhub.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.escrowhub.ui.screens.DashboardScreen
+import com.example.escrowhub.ui.screens.EscrowDetailScreen
 import com.example.escrowhub.ui.screens.EscrowScreen
 import com.example.escrowhub.ui.screens.ForgotPasswordScreen
 import com.example.escrowhub.ui.screens.LoginScreen
 import com.example.escrowhub.ui.screens.RegisterScreen
 import com.example.escrowhub.ui.screens.SplashScreen
+import com.example.escrowhub.ui.screens.WalletScreen
 
 @Composable
 fun EscrowHubNavGraph(navController: NavHostController) {
@@ -35,5 +39,15 @@ fun EscrowHubNavGraph(navController: NavHostController) {
         composable(route = Screen.Escrow.route) {
             EscrowScreen(navController = navController)
         }
+        composable(
+            route = Screen.EscrowDetail.route,
+            arguments = listOf(navArgument("escrowId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val escrowId = backStackEntry.arguments?.getString("escrowId") ?: ""
+            EscrowDetailScreen(escrowId = escrowId, navController = navController)
+        }
+        composable(
+            route = Screen.Wallet.route) {
+            WalletScreen(navController = navController) }
     }
 }
