@@ -67,9 +67,6 @@ fun RegisterScreen(navController: NavController,
     var confirmPassword by remember { mutableStateOf("")}
     var passwordVisible by remember {
         mutableStateOf(false) }
-    var selectedRole by remember {
-        mutableStateOf("Student") }
-    val roles = listOf("Student","Teacher")
     // auth view model references
     val authState by authViewModel.authState.collectAsState()
     val isLoading = authState is AuthState.Loading
@@ -80,7 +77,7 @@ fun RegisterScreen(navController: NavController,
     LaunchedEffect(authState
     ) {
         if(authState is AuthState.Success){
-            navController.navigate(Screen.Dashboard.route){
+            navController.navigate(Screen.Home.route){
                 popUpTo(Screen.Register.route) {inclusive = true}
             }
         }
@@ -95,19 +92,15 @@ fun RegisterScreen(navController: NavController,
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp, vertical = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally){
-            Icon(Icons.Default.VideoLibrary,
-                contentDescription = null,
-                tint=MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(64.dp))
-            Spacer(Modifier.height(8.dp))
             Text(text="Create Account",
-                style= MaterialTheme.typography.headlineMedium,
-                color=MaterialTheme.colorScheme.onBackground)
+                style= MaterialTheme.typography.displayMedium,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                color=MaterialTheme.colorScheme.primary)
             Spacer(Modifier.height(8.dp))
             Text(text="Join EscrowHub Today",
                 style= MaterialTheme.typography.bodyLarge,
                 color=MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = 0.5f
+                    alpha = 0.6f
                 ))
             Spacer(Modifier.height(32.dp))
             // form inputs for registration
@@ -178,47 +171,23 @@ fun RegisterScreen(navController: NavController,
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(Modifier.height(20.dp))
-            // role selector : dropdown
-            Text("Select Role",
-                style=MaterialTheme.typography.labelSmall,
-                modifier = Modifier.align(Alignment.Start),
-                color= MaterialTheme.colorScheme.onSurface
-                    .copy(alpha = 0.7f))
-            Spacer(Modifier.height(8.dp))
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    12.dp
-                )
-            ) {
-                // present options to the user
-                roles.forEach { role ->
-                    // capture what role user selects
-                    val selected = selectedRole == role
-                    //composable to present the options
-                    FilterChip(
-                        selected = selected,
-                        onClick = {selectedRole = role},
-                        label = {Text(role)},
-                        modifier= Modifier.weight(1f),
-                        leadingIcon = {
-                            Icon(
-                                if(role == "Teacher") Icons.Default.School
-                                else
-                                    Icons.Default.Person,null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    )
-                }
-            }
             Spacer(Modifier.height(28.dp))
+
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+
             // Register Button
             Button(
                 onClick = {
                     if(password == confirmPassword){
                         authViewModel.register(fullname,email,password,
-                            selectedRole)
+                            "User")
                     }
                 },
                 modifier= Modifier.fillMaxWidth().height(52.dp),

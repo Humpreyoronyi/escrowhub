@@ -65,7 +65,7 @@ fun LoginScreen(navController: NavController,
     LaunchedEffect(authState
     ) {
         if(authState is AuthState.Success){
-            navController.navigate(Screen.Dashboard.route){
+            navController.navigate(Screen.Home.route){
                 popUpTo(Screen.Login.route) {inclusive = true}
             }
         }
@@ -79,21 +79,17 @@ fun LoginScreen(navController: NavController,
         Column(modifier = Modifier.fillMaxWidth()
             .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally){
-            Icon(Icons.Default.VideoLibrary,
-                contentDescription = null,
-                tint=MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(64.dp))
-            Spacer(Modifier.height(8.dp))
             Text(text="Welcome Back",
-                style= MaterialTheme.typography.displayLarge,
-                color=MaterialTheme.colorScheme.onBackground)
+                style= MaterialTheme.typography.displayMedium,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                color=MaterialTheme.colorScheme.primary)
             Spacer(Modifier.height(8.dp))
-            Text(text="Sign In to EscrowHub",
+            Text(text="Sign In to continue with EscrowHub",
                 style= MaterialTheme.typography.bodyLarge,
                 color=MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = 0.5f
+                    alpha = 0.6f
                 ))
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(48.dp))
             // form inputs
             // onValueCHange = captures the current input the user
             // enters
@@ -152,6 +148,16 @@ fun LoginScreen(navController: NavController,
                     color=MaterialTheme.colorScheme.primary)
             }
             Spacer(modifier = Modifier.height(20.dp))
+            
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+
             Button(
                 onClick = {
                     authViewModel.login(email,password)

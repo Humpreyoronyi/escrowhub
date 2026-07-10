@@ -1,7 +1,9 @@
 package com.example.escrowhub.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -10,6 +12,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,16 +52,16 @@ fun EscrowScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Create New Escrow") },
+            CenterAlignedTopAppBar(
+                title = { Text("Start a New Deal", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.primary
                 )
             )
         }
@@ -66,36 +70,47 @@ fun EscrowScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.background)
+                .padding(24.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Text(
+                "Secure your transaction by creating a new escrow contract.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
             // Form Fields
             OutlinedTextField(
                 value = itemName,
                 onValueChange = { itemName = it },
-                label = { Text("Item Name") },
+                label = { Text("What are you buying?") },
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(16.dp)
             )
 
             OutlinedTextField(
                 value = amount,
                 onValueChange = { amount = it },
-                label = { Text("Price (Exact Amount)") },
+                label = { Text("Agreed Amount (Ksh)") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(16.dp)
             )
 
             OutlinedTextField(
                 value = buyerPhone,
                 onValueChange = { buyerPhone = it },
-                label = { Text("Your M-Pesa Phone Number") },
+                label = { Text("Your M-Pesa Number") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(16.dp)
             )
 
             OutlinedTextField(
@@ -107,29 +122,31 @@ fun EscrowScreen(
                 label = { Text("Seller's Email") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                isError = validationError != null
+                isError = validationError != null,
+                shape = RoundedCornerShape(16.dp)
             )
 
             OutlinedTextField(
                 value = sellerPhone,
                 onValueChange = { sellerPhone = it },
-                label = { Text("Seller's Phone Number") },
+                label = { Text("Seller's M-Pesa Number") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(16.dp)
             )
 
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text("Detailed Description") },
+                label = { Text("Add specific terms (optional)") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp),
-                maxLines = 5
+                    .height(120.dp),
+                shape = RoundedCornerShape(16.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Submit Button
             Button(
@@ -151,7 +168,8 @@ fun EscrowScreen(
                     )
                     escrowViewModel.createEscrowWithPayment(newEscrow, buyerPhone)
                 },
-                modifier = Modifier.fillMaxWidth().height(52.dp),
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(16.dp),
                 enabled = itemName.isNotBlank() && amount.isNotBlank() && sellerEmail.isNotBlank() && buyerPhone.isNotBlank() && (escrowState !is EscrowState.Loading)
             ) {
                 if (escrowState is EscrowState.Loading) {
@@ -161,7 +179,7 @@ fun EscrowScreen(
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text("Deposit Funds & Start New Escrow")
+                    Text("Secure Funds & Start Deal", fontWeight = FontWeight.Bold)
                 }
             }
 

@@ -6,7 +6,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.escrowhub.ui.screens.DashboardScreen
+import com.example.escrowhub.ui.screens.HomeScreen
+import com.example.escrowhub.ui.screens.NotificationScreen
+import com.example.escrowhub.ui.screens.ProfileScreen
 import com.example.escrowhub.ui.screens.EscrowDetailScreen
 import com.example.escrowhub.ui.screens.EscrowScreen
 import com.example.escrowhub.ui.screens.ForgotPasswordScreen
@@ -33,10 +35,10 @@ fun EscrowHubNavGraph(navController: NavHostController) {
         composable(route = Screen.ForgotPassword.route) {
             ForgotPasswordScreen(navController = navController)
         }
-        composable(route = Screen.Dashboard.route) {
-            DashboardScreen(navController = navController)
+        composable(route = Screen.Home.route) {
+            HomeScreen(navController = navController)
         }
-        composable(route = Screen.Escrow.route) {
+        composable(route = Screen.CreateEscrow.route) {
             EscrowScreen(navController = navController)
         }
         composable(
@@ -48,6 +50,13 @@ fun EscrowHubNavGraph(navController: NavHostController) {
         }
         composable(
             route = Screen.Wallet.route) {
-            WalletScreen(navController = navController) }
+            WalletScreen(navController = navController) 
+        }
+        composable(route = Screen.Notifications.route) {
+            NotificationScreen(navController = navController)
+        }
+        composable(route = Screen.Profile.route) {
+            ProfileScreen(navController = navController)
+        }
     }
 }

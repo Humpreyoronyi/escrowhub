@@ -6,6 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,23 +16,26 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.escrowhub.R
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.escrowhub.navigation.Screen
+import com.example.escrowhub.viewmodel.AuthState
+import com.example.escrowhub.viewmodel.AuthViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
     // Animation states
     val scale = remember { Animatable(0.6f) }
     val alpha = remember { Animatable(0f) }
     val translateY = remember { Animatable(30f) }
+    
+    val authState by authViewModel.authState.collectAsState()
 
     LaunchedEffect(Unit) {
         // Run animations in parallel
@@ -60,8 +65,15 @@ fun SplashScreen(navController: NavController) {
         }
         
         delay(3.seconds)
-        navController.navigate(Screen.Login.route) {
-            popUpTo(Screen.Splash.route) { inclusive = true }
+        
+        if (authState is AuthState.Success) {
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Splash.route) { inclusive = true }
+            }
+        } else {
+            navController.navigate(Screen.Login.route) {
+                popUpTo(Screen.Splash.route) { inclusive = true }
+            }
         }
     }
 
@@ -73,8 +85,8 @@ fun SplashScreen(navController: NavController) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF1A1D23), // Deep Charcoal
-                        Color(0xFF090B0F)  // Near Black
+                        Color(0xFF000000), // Pure Black
+                        Color(0xFF212121)  // Dark Gray
                     )
                 )
             )
@@ -86,21 +98,22 @@ fun SplashScreen(navController: NavController) {
             // Glowing Logo Circle
             Surface(
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(180.dp)
                     .scale(scale.value)
                     .graphicsLayer(alpha = alpha.value),
                 shape = CircleShape,
-                color = Color.White,
-                border = BorderStroke(2.dp, Color.White.copy(alpha = 0.2f)),
-                shadowElevation = 24.dp
+                color = Color.White.copy(alpha = 0.15f),
+                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.3f)),
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.app_logo),
-                    contentDescription = "EscrowHub Logo",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(36.dp)
-                )
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.Shield,
+                        contentDescription = "EscrowHub Logo",
+                        modifier = Modifier
+                            .size(100.dp),
+                        tint = Color.White
+                    )
+                }
             }
             
             Spacer(Modifier.height(48.dp))

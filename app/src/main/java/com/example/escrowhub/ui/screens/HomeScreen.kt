@@ -9,12 +9,21 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.AccountBalanceWallet
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.escrowhub.model.Escrow
@@ -26,7 +35,7 @@ import com.example.escrowhub.viewmodel.EscrowViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(
+fun HomeScreen(
     navController: NavController,
     authViewModel: AuthViewModel = viewModel(),
     escrowViewModel: EscrowViewModel = viewModel()
@@ -39,7 +48,7 @@ fun DashboardScreen(
     LaunchedEffect(authState) {
         if (authState is AuthState.Logout) {
             navController.navigate(Screen.Login.route) {
-                popUpTo(Screen.Dashboard.route) { inclusive = true }
+                popUpTo(Screen.Home.route) { inclusive = true }
             }
         }
     }
@@ -53,30 +62,67 @@ fun DashboardScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("EscrowHub Dashboard") },
+            CenterAlignedTopAppBar(
+                title = { 
+                    Text(
+                        "EscrowHub",
+                        style = MaterialTheme.typography.headlineMedium
+                    ) 
+                },
                 actions = {
-                    IconButton(onClick = { navController.navigate(Screen.Wallet.route) }) {
-                        Icon(Icons.Default.AccountBalanceWallet, contentDescription = "Wallet")
-                    }
                     IconButton(onClick = { authViewModel.logout() }) {
-                        Icon(Icons.Default.ExitToApp, contentDescription = "Logout")
+                        Icon(
+                            Icons.Default.ExitToApp, 
+                            contentDescription = "Logout",
+                            tint = MaterialTheme.colorScheme.error
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.primary
                 )
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navController.navigate(Screen.Escrow.route) },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+        bottomBar = {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                tonalElevation = 8.dp
             ) {
-                Icon(Icons.Default.Add, contentDescription = "New Escrow")
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { },
+                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+                    label = { Text("Home") }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.Wallet.route) },
+                    icon = { Icon(Icons.Outlined.AccountBalanceWallet, contentDescription = "Wallet") },
+                    label = { Text("Wallet") }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.Notifications.route) },
+                    icon = { Icon(Icons.Outlined.Notifications, contentDescription = "Notifications") },
+                    label = { Text("Notifications") }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.Profile.route) },
+                    icon = { Icon(Icons.Outlined.Person, contentDescription = "Profile") },
+                    label = { Text("Profile") }
+                )
             }
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { navController.navigate(Screen.CreateEscrow.route) },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                icon = { Icon(Icons.Default.Add, contentDescription = null) },
+                text = { Text("New Deal") }
+            )
         }
     ) { padding ->
         Column(
@@ -155,14 +201,15 @@ fun EscrowItemCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(20.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -170,29 +217,37 @@ fun EscrowItemCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = itemName,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "Ksh $amount",
                     style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
 
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(8.dp),
                 color = when (status) {
-                    "PENDING" -> Color(0xFFFF9800)
-                    "DISPATCHED" -> Color(0xFF2196F3)
-                    else -> Color(0xFF4CAF50)
+                    "PENDING" -> Color(0xFFFF9800).copy(alpha = 0.1f)
+                    "DISPATCHED" -> Color(0xFF2196F3).copy(alpha = 0.1f)
+                    else -> Color(0xFF4CAF50).copy(alpha = 0.1f)
                 }
             ) {
                 Text(
                     text = status,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.White
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = when (status) {
+                        "PENDING" -> Color(0xFFFF9800)
+                        "DISPATCHED" -> Color(0xFF2196F3)
+                        else -> Color(0xFF4CAF50)
+                    }
                 )
             }
         }

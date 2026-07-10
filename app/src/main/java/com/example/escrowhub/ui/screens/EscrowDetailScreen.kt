@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -68,7 +69,11 @@ fun EscrowDetailScreen(escrowId: String,
                     IconButton(onClick = {navController.popBackStack()}) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.primary
+                )
             )
         }
     ) { 
@@ -141,7 +146,7 @@ fun EscrowDetailScreen(escrowId: String,
                     showSuccessDialog = false
                     navController.popBackStack()  // Takes you back after success
                 }) {
-                    Text("Back to Dashboard")
+                    Text("Back to Home")
                 }
             },
             title = { Text("Payment Successful!") },
